@@ -1,7 +1,7 @@
 {
   "name": "piedra-papel-tijera",
   "version": "1.0.0",
-  "main": "servidor.js",
+  "main": "server.js",
   "scripts": {
     "start": "node servidor.js"
   },
