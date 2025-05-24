@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Piedra, Papel o Tijeras</title>
+  <style>
+    :root {
+      --color-primario: #5e60ce;
+      --color-secundario: #4ea8de;
+      --color-fondo: #f0eaff;
+      --color-chat-propio: #d0f4de;
+      --color-chat-otro: #fef9c3;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(180deg, #f0eaff 0%, #ffffff 100%);
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 20px;
+}
+
+    h1 {
+      color: var(--color-primario);
+      margin-bottom: 20px;
+    }
+
+    .game-container {
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    .botones {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      background: var(--color-primario);
+      border: none;
+      color: white;
+      padding: 15px 20px;
+      font-size: 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      width: 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background: var(--color-secundario);
+    }
+
+    .icono {
+      width: 50px;
+      height: 50px;
+      margin-bottom: 8px;
+    }
+
+    #mensaje, #resultado {
+      font-size: 16px;
+      margin: 10px 0;
+      min-height: 24px;
+      text-align: center;
+    }
+
+    #resultado {
+      font-weight: bold;
+      color: #1a1a1a;
+      font-size: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background: var(--color-primario);
+      color: white;
+    }
+
+    #chat-container {
+      margin-top: 30px;
+    }
+
+    #chat-container h3 {
+      margin-bottom: 10px;
+      color: var(--color-primario);
+    }
+
+    #chat-mensajes {
+      background: #fff;
+      border-radius: 10px;
+      padding: 10px;
+      height: 200px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .mensaje {
+      padding: 10px 14px;
+      max-width: 70%;
+      border-radius: 18px;
+      font-size: 14px;
+      line-height: 1.4;
+      word-wrap: break-word;
+    }
+
+    .mensaje.propio {
+      background: var(--color-chat-propio);
+      align-self: flex-end;
+      border-bottom-right-radius: 0;
+    }
+
+    .mensaje.otro {
+      background: var(--color-chat-otro);
+      align-self: flex-start;
+      border-bottom-left-radius: 0;
+      border: 1px solid #ddd;
+    }
+
+    .chat-input-container {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    #chat-input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 20px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+    }
+
+    #btn-chat {
+      margin-left: 10px;
+      padding: 10px 16px;
+      font-size: 14px;
+      background: var(--color-secundario);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    #btn-chat:hover {
+      background: #4098d7;
+    }
+    .btn.activo {
+  background: #9c8af0; /* color morado claro para destacar */
+  box-shadow: 0 0 12px 3px rgba(94, 96, 206, 0.7);
+}
+  </style>
+</head>
+<body>
+
+  <h1>Piedra, Papel o Tijeras ✂️</h1>
+
+  <div class="game-container">
+
+    <div class="botones">
+      <button class="btn" onclick="enviarEleccion('piedra')">
+        <img src="img/piedra.png" alt="Piedra" class="icono" />
+        Piedra
+      </button>
+      <button class="btn" onclick="enviarEleccion('papel')">
+        <img src="img/papel.png" alt="Papel" class="icono" />
+        Papel
+      </button>
+      <button class="btn" onclick="enviarEleccion('tijeras')">
+        <img src="img/tijeras.png" alt="Tijeras" class="icono" />
+        Tijeras
+      </button>
+    </div>
+
+    <div id="mensaje"></div>
+    <div id="resultado"></div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Jugador</th>
+          <th>Ganadas</th>
+          <th>Perdidas</th>
+          <th>Empates</th>
+        </tr>
+      </thead>
+      <tbody id="tabla-estadisticas">
+        <!-- Llenado dinámico -->
+      </tbody>
+    </table>
+
+    <div id="chat-container">
+      <h3>💬 Chat</h3>
+      <div id="chat-mensajes"></div>
+      <div class="chat-input-container">
+        <input type="text" id="chat-input" placeholder="Escribe un mensaje..." />
+        <button id="btn-chat" onclick="enviarChat()">✈️</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="cliente.js"></script>
+</body>
+</html>
